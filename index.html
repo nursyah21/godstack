@@ -17,6 +17,10 @@
     </header>
 
     <section>
+        <p>contoh penerapan di aplikasi <a href="https://raw.githubusercontent.com/nursyah21/godstack/refs/heads/main/todolist.html">todolist</a></p>
+    </section>
+
+    <section>
         <h4>
             File yg perlu dicopy
         </h4>
@@ -26,6 +30,7 @@
         <p>Copy kode ini ke bagian `style` :</p>
         <pre><code> :root{--p:#007bff;--b:#fff;--t:#333;--g:#f4f4f4}body{font-family:system-ui,sans-serif;line-height:1.6;color:var(--t);max-width:800px;margin:40px auto;padding:0 20px;background:var(--b)}button,.btn{background:var(--p);color:#fff;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;transition:opacity .2s}button:hover{opacity:.8}input,select,textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #ddd;border-radius:4px;box-sizing:border-box}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:12px;border-bottom:1px solid var(--g);text-align:left}th{background:var(--g)}a{color:var(--p)}pre{background:var(--g);padding:15px;border-radius:8px;overflow-x:auto;position:relative}</code></pre>
     </section>
+
 
     <section>
         <h4>
@@ -63,29 +68,6 @@ s.count++;</code></pre>
 });</code></pre>
         <p><b>serialize()</b> - Mengubah data form menjadi Object secara instan.</p>
         <pre><code>const formData = $('form').serialize();</code></pre>
-    </section>
-
-    <section>
-        <h4>
-           Konfigurasi vercel.json
-        </h4>
-        <pre><code>{
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}</code></pre>
-    </section>
-
-    <section>
-        <h4>Supabase Example</h4>
-        Rekomendasi backend menggunakan supabase
-        <pre><code>CREATE TABLE items (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  nama_item TEXT NOT NULL,
-  user_id uuid REFERENCES auth.users DEFAULT auth.uid()
-);
-ALTER TABLE items ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Owner All" ON items FOR ALL USING (auth.uid() = user_id);</code></pre>
     </section>
 
     <footer>
