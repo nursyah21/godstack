@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Stack Documentation</title>
+    <style>
+        :root {
+            --p: #00d1b2;
+            --b: #1a1a1a;
+            --t: #f5f5f5;
+            --g: #2b2b2b;
+            --accent: #ffdd57;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--t);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: var(--b);
+        }
+        h1, h2, h3 { color: var(--p); }
+        code {
+            background: var(--g);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--accent);
+        }
+        pre {
+            background: var(--g);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 4px solid var(--p);
+        }
+        .card {
+            background: var(--g);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--p);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .steps { margin-left: 20px; }
+        .steps li { margin-bottom: 15px; }
+        footer { text-align: center; margin-top: 50px; opacity: 0.6; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⚡ God Stack Framework</h1>
+        <p>Arsitektur SPA (Single Page Application) minimalis berbasis JavaScript murni dan Supabase.</p>
+    </header>
+
+    <div class="card">
+        <h3>🚀 Apa itu God Stack?</h3>
+        <p>God Stack adalah pendekatan <i>no-build step</i> untuk membangun aplikasi web. Kamu tidak butuh Webpack, Vite, atau NPM. Cukup satu file HTML untuk menangani:</p>
+        <ul>
+            <li><strong>DOM Wrapper:</strong> Manipulasi elemen ala jQuery menggunakan <code>$()</code>.</li>
+            <li><strong>Routing:</strong> Client-side routing berbasis <code>hashchange</code>.</li>
+            <li><strong>Reactive State:</strong> Sinkronisasi data ke UI secara otomatis.</li>
+            <li><strong>Supabase Integration:</strong> Autentikasi dan Database Realtime.</li>
+        </ul>
+    </div>
+
+    <h2>🛠 Cara Persiapan (Setup)</h2>
+    <div class="steps">
+        <ol>
+            <li>
+                <strong>Konfigurasi Supabase:</strong>
+                <p>Buka <code>framework.html</code> dan cari variabel di bawah ini. Ganti dengan kredensial dari dashboard Supabase-mu:</p>
+                <pre>const SB_URL = "https://PROJECT_ID.supabase.co";
+const SB_KEY = "YOUR_ANON_KEY";</pre>
+            </li>
+            <li>
+                <strong>Siapkan Database:</strong>
+                <p>Jalankan query SQL berikut di <b>SQL Editor</b> Supabase untuk membuat tabel dan kebijakan keamanan (RLS):</p>
+                <pre>CREATE TABLE items (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  nama_item TEXT NOT NULL,
+  user_id uuid REFERENCES auth.users DEFAULT auth.uid()
+);
+
+ALTER TABLE items ENABLE ROW LEVEL SECURITY;
+-- Tambahkan policy SELECT, INSERT, UPDATE sesuai di file framework.html</pre>
+            </li>
+        </ol>
+    </div>
+
+    <h2>📖 Panduan Penggunaan Fungsi <code>$</code></h2>
+    
+    <h3>1. Manipulasi & Render</h3>
+    <pre>// Mengubah konten
+$('#app').html('&lt;h1&gt;Halo Dunia&lt;/h1&gt;');
+
+// Render Template Otomatis
+$('#list-container').render([{id: 1, nama_item: 'Kopi'}]);</pre>
+
+    <h3>2. State Management</h3>
+    <p>Setiap kali <code>store.items</code> berubah, elemen <code>#list-container</code> akan otomatis di-render ulang.</p>
+    <pre>const store = $.state({ items: [] }, (s) => $('#list-container').render(s.items));</pre>
+
+    <h3>3. Ajax / API Call</h3>
+    <pre>$.ajax({
+    url: '...',
+    method: 'POST',
+    data: { nama: 'Item Baru' },
+    success: (res) => console.log(res)
+});</pre>
+
+    <h2>📦 Deployment</h2>
+    <p>File ini sudah menyertakan konfigurasi <code>vercel.json</code>. Kamu bisa langsung deploy ke Vercel dengan perintah:</p>
+    <pre>vercel --prod</pre>
+
+    <footer>
+        <p>Dibuat dengan dedikasi untuk performa maksimal. <br> God Stack &copy; 2026</p>
+    </footer>
+
+</body>
+</html>
