@@ -5,128 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>God Stack Documentation</title>
     <style>
-        :root {
-            --p: #00d1b2;
-            --b: #1a1a1a;
-            --t: #f5f5f5;
-            --g: #2b2b2b;
-            --accent: #ffdd57;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--t);
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background: var(--b);
-        }
-        h1, h2, h3 { color: var(--p); }
-        code {
-            background: var(--g);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: var(--accent);
-        }
-        pre {
-            background: var(--g);
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            border-left: 4px solid var(--p);
-        }
-        .card {
-            background: var(--g);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .badge {
-            display: inline-block;
-            background: var(--p);
-            color: #000;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .steps { margin-left: 20px; }
-        .steps li { margin-bottom: 15px; }
-        footer { text-align: center; margin-top: 50px; opacity: 0.6; font-size: 0.9rem; }
+        :root{--p:#007bff;--b:#fff;--t:#333;--g:#f4f4f4}body{font-family:system-ui,sans-serif;line-height:1.6;color:var(--t);max-width:800px;margin:40px auto;padding:0 20px;background:var(--b)}button,.btn{background:var(--p);color:#fff;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;transition:opacity .2s}button:hover{opacity:.8}input,select,textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #ddd;border-radius:4px;box-sizing:border-box}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:12px;border-bottom:1px solid var(--g);text-align:left}th{background:var(--g)}a{color:var(--p)}pre{background:var(--g);padding:15px;border-radius:8px;overflow-x:auto;position:relative}
     </style>
 </head>
 <body>
 
     <header>
-        <h1>⚡ God Stack Framework</h1>
-        <p>Arsitektur SPA (Single Page Application) minimalis berbasis JavaScript murni dan Supabase.</p>
+        <h1>⚡ God Stack Framework Documentation</h1>
+        <p>Satu file untuk segalanya. Tanpa build tools, tanpa ribet.</p>
+
+        <a href="https://raw.githubusercontent.com/nursyah21/godstack/refs/heads/main/framework.html">Get Code</a>
     </header>
 
-    <div class="card">
-        <h3>🚀 Apa itu God Stack?</h3>
-        <p>God Stack adalah pendekatan <i>no-build step</i> untuk membangun aplikasi web. Kamu tidak butuh Webpack, Vite, atau NPM. Cukup satu file HTML untuk menangani:</p>
-        <ul>
-            <li><strong>DOM Wrapper:</strong> Manipulasi elemen ala jQuery menggunakan <code>$()</code>.</li>
-            <li><strong>Routing:</strong> Client-side routing berbasis <code>hashchange</code>.</li>
-            <li><strong>Reactive State:</strong> Sinkronisasi data ke UI secara otomatis.</li>
-            <li><strong>Supabase Integration:</strong> Autentikasi dan Database Realtime.</li>
-        </ul>
-    </div>
+    <section>
+        <h3>1. Manipulasi DOM & Event ($)</h3>
+        <p>Gunakan selector <code>$</code> untuk menangkap elemen dan memanipulasi atribut, style, atau event.</p>
+        <pre><code>// Menangkap elemen & ubah isi HTML
+$('#app').html('Hello World');
 
-    <h2>🛠 Cara Persiapan (Setup)</h2>
-    <div class="steps">
-        <ol>
-            <li>
-                <strong>Konfigurasi Supabase:</strong>
-                <p>Buka <code>framework.html</code> dan cari variabel di bawah ini. Ganti dengan kredensial dari dashboard Supabase-mu:</p>
-                <pre>const SB_URL = "https://PROJECT_ID.supabase.co";
-const SB_KEY = "YOUR_ANON_KEY";</pre>
-            </li>
-            <li>
-                <strong>Siapkan Database:</strong>
-                <p>Jalankan query SQL berikut di <b>SQL Editor</b> Supabase untuk membuat tabel dan kebijakan keamanan (RLS):</p>
-                <pre>CREATE TABLE items (
+// Event Listener
+$('#btn').on('click', () => alert('Diklik!'));
+
+// Tambah/Ubah CSS
+$('#app').css({ color: 'blue', fontWeight: 'bold' });
+
+// Mengambil atau mengubah Atribut
+$('input').attr('placeholder', 'Masukkan nama...');
+const type = $('input').attr('type');</code></pre>
+    </section>
+
+    <section>
+        <h3>2. Client-Side Routing ($.route)</h3>
+        <p>Navigasi halaman menggunakan hash URL (<code>#</code>) tanpa reload.</p>
+        <pre><code>$.route({
+    '/': () => $('#app').html('Halaman Utama'),
+    'login': () => renderLoginPage(),
+    'data': () => renderDataPage(),
+    '404': () => $('#app').html('Not Found')
+});</code></pre>
+    </section>
+
+    <section>
+        <h3>3. Database Supabase (SQL & RLS)</h3>
+        <p>Agar aplikasi berjalan, jalankan query ini di SQL Editor Supabase Anda:</p>
+        <pre><code>-- 1. Buat Tabel
+CREATE TABLE items (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   nama_item TEXT NOT NULL,
   user_id uuid REFERENCES auth.users DEFAULT auth.uid()
 );
 
+-- 2. Aktifkan Keamanan (RLS)
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;
--- Tambahkan policy SELECT, INSERT, UPDATE sesuai di file framework.html</pre>
-            </li>
-        </ol>
-    </div>
 
-    <h2>📖 Panduan Penggunaan Fungsi <code>$</code></h2>
+-- 3. Kebijakan Akses
+CREATE POLICY "Public View" ON items FOR SELECT USING (true);
+CREATE POLICY "Owner Insert" ON items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Owner All" ON items FOR ALL USING (auth.uid() = user_id);</code></pre>
+    </section>
+
+    <section>
+        <h3>4. Login & Ajax (serialize)</h3>
+        <p>Gunakan <code>serialize()</code> untuk memproses form dan kirim via <code>$.ajax</code>.</p>
+        <pre><code>// Contoh Login ke Supabase
+$('#loginForm').on('submit', (e) => {
+    e.preventDefault();
+    const payload = $('#loginForm').serialize(); // Jadi object {email, password}
     
-    <h3>1. Manipulasi & Render</h3>
-    <pre>// Mengubah konten
-$('#app').html('&lt;h1&gt;Halo Dunia&lt;/h1&gt;');
+    $.ajax({
+        url: 'https://PROJECT.supabase.co/auth/v1/token?grant_type=password',
+        method: 'POST',
+        data: payload,
+        headers: { "apikey": "YOUR_KEY" },
+        success: (res) => {
+            localStorage.setItem('sb-token', res.access_token);
+            location.hash = 'data';
+        }
+    });
+});</code></pre>
+    </section>
 
-// Render Template Otomatis
-$('#list-container').render([{id: 1, nama_item: 'Kopi'}]);</pre>
-
-    <h3>2. State Management</h3>
-    <p>Setiap kali <code>store.items</code> berubah, elemen <code>#list-container</code> akan otomatis di-render ulang.</p>
-    <pre>const store = $.state({ items: [] }, (s) => $('#list-container').render(s.items));</pre>
-
-    <h3>3. Ajax / API Call</h3>
-    <pre>$.ajax({
-    url: '...',
-    method: 'POST',
-    data: { nama: 'Item Baru' },
-    success: (res) => console.log(res)
-});</pre>
-
-    <h2>📦 Deployment</h2>
-    <p>File ini sudah menyertakan konfigurasi <code>vercel.json</code>. Kamu bisa langsung deploy ke Vercel dengan perintah:</p>
-    <pre>vercel --prod</pre>
+    <section>
+        <h3>5. Deployment Vercel</h3>
+        <p>Gunakan file <code>vercel.json</code> agar routing SPA Anda tidak error 404 saat di-refresh:</p>
+        <pre><code>{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}</code></pre>
+    </section>
 
     <footer>
-        <p>Dibuat dengan dedikasi untuk performa maksimal. <br> God Stack &copy; 2026</p>
+        <hr>
+        <p>Dibuat Feb 2026</p>
     </footer>
 
+    <script>
+        const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.route=(r)=>{const l=()=>{const s=location.hash.slice(1)||"/",a=r[s]||r["404"];a&&a()};window.onhashchange=l;l()};
+    </script>
 </body>
 </html>
