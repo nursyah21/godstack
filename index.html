@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>God Stack Documentation</title>
+    <title>God Stack</title>
     <style>
         :root{--p:#007bff;--b:#fff;--t:#333;--g:#f4f4f4}body{font-family:system-ui,sans-serif;line-height:1.6;color:var(--t);max-width:800px;margin:40px auto;padding:0 20px;background:var(--b)}button,.btn{background:var(--p);color:#fff;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;transition:opacity .2s}button:hover{opacity:.8}input,select,textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #ddd;border-radius:4px;box-sizing:border-box}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:12px;border-bottom:1px solid var(--g);text-align:left}th{background:var(--g)}a{color:var(--p)}pre{background:var(--g);padding:15px;border-radius:8px;overflow-x:auto;position:relative}
     </style>
@@ -11,99 +11,86 @@
 <body>
 
     <header>
-        <h1>⚡ God Stack Framework Documentation</h1>
-        <p>Satu file untuk segalanya. Tanpa build tools, tanpa ribet.</p>
-
-        <a href="https://raw.githubusercontent.com/nursyah21/godstack/refs/heads/main/framework.html">Get Code</a>
+        <h1>⚡ God Stack</h1>
+        <p>Framework SPA minimalis. Satu file untuk segalanya.</p>
+        <hr>
     </header>
 
     <section>
-        <h3>1. Manipulasi DOM & Event ($)</h3>
-        <p>Gunakan selector <code>$</code> untuk menangkap elemen dan memanipulasi atribut, style, atau event.</p>
-        <pre><code>// Menangkap elemen & ubah isi HTML
-$('#app').html('Hello World');
-
-// Event Listener
-$('#btn').on('click', () => alert('Diklik!'));
-
-// Tambah/Ubah CSS
-$('#app').css({ color: 'blue', fontWeight: 'bold' });
-
-// Mengambil atau mengubah Atribut
-$('input').attr('placeholder', 'Masukkan nama...');
-const type = $('input').attr('type');</code></pre>
+        <h4>
+            File yg perlu dicopy
+        </h4>
+        <p>Copy kode ini ke bagian `script` pastikan posisinya paling bawah</p>
+        <pre><code>const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.go=(s)=>{window.history.pushState({},"",s);window.dispatchEvent(new Event("popstate"))};$.route=(r)=>{const l=()=>{const s=window.location.pathname||"/",a=r[s]||r["404"];a&&a()};window.onpopstate=l;l()};</code></pre>
+    
+        <p>Copy kode ini ke bagian `style` :</p>
+        <pre><code> :root{--p:#007bff;--b:#fff;--t:#333;--g:#f4f4f4}body{font-family:system-ui,sans-serif;line-height:1.6;color:var(--t);max-width:800px;margin:40px auto;padding:0 20px;background:var(--b)}button,.btn{background:var(--p);color:#fff;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;transition:opacity .2s}button:hover{opacity:.8}input,select,textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #ddd;border-radius:4px;box-sizing:border-box}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:12px;border-bottom:1px solid var(--g);text-align:left}th{background:var(--g)}a{color:var(--p)}pre{background:var(--g);padding:15px;border-radius:8px;overflow-x:auto;position:relative}</code></pre>
     </section>
 
     <section>
-        <h3>2. Client-Side Routing ($.route)</h3>
-        <p>Navigasi halaman menggunakan hash URL (<code>#</code>) tanpa reload.</p>
+        <h4>
+            Route
+        </h4>
+        <p>Navigasi sekarang menggunakan path asli. Gunakan <code>$.go('/path')</code> untuk berpindah halaman tanpa reload.</p>
         <pre><code>$.route({
     '/': () => $('#app').html('Halaman Utama'),
-    'login': () => renderLoginPage(),
-    'data': () => renderDataPage(),
-    '404': () => $('#app').html('Not Found')
+    '/login': () => renderLoginPage(),
+    '/dashboard': () => $('#app').html('Selamat Datang!'),
+    '404': () => $('#app').html('Halaman Hilang!')
+});
+
+// Pindah halaman via script
+$('#btn').on('click', () => $.go('/dashboard'));</code></pre>
+    </section>
+
+    <section>
+        <h4>
+            Fungsi JavaScript
+        </h4>
+        <p><b>$.state(obj, cb)</b> - Membuat UI reaktif. Ubah data, tampilan otomatis update.</p>
+        <pre><code>const s = $.state({ count: 0 }, (data) => $('#app').html(data.count));
+s.count++;</code></pre>
+        <p><b>render(data)</b> - Mengisi template <code>{{ key }}</code> di HTML. Jika data berupa Array, otomatis looping.</p>
+        <pre><code>$('#list').render([{nama:'A'}, {nama:'B'}]);</code></pre>
+        <p><b>$.ajax({ url, method, data, headers, success, error })</b> - Wrapper Fetch API untuk request data.</p>
+        <pre><code>$.ajax({
+    url: 'https://api.example.com/data',
+    method: 'POST', // Default: GET
+    data: { id: 1 }, // Dikirim sebagai JSON string
+    headers: { "Authorization": "Bearer TOKEN" },
+    success: (res) => console.log('Berhasil:', res),
+    error: (err) => console.error('Gagal:', err)
 });</code></pre>
+        <p><b>serialize()</b> - Mengubah data form menjadi Object secara instan.</p>
+        <pre><code>const formData = $('form').serialize();</code></pre>
     </section>
 
     <section>
-        <h3>3. Database Supabase (SQL & RLS)</h3>
-        <p>Agar aplikasi berjalan, jalankan query ini di SQL Editor Supabase Anda:</p>
-        <pre><code>-- 1. Buat Tabel
-CREATE TABLE items (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  nama_item TEXT NOT NULL,
-  user_id uuid REFERENCES auth.users DEFAULT auth.uid()
-);
-
--- 2. Aktifkan Keamanan (RLS)
-ALTER TABLE items ENABLE ROW LEVEL SECURITY;
-
--- 3. Kebijakan Akses
-CREATE POLICY "Public View" ON items FOR SELECT USING (true);
-CREATE POLICY "Owner Insert" ON items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Owner All" ON items FOR ALL USING (auth.uid() = user_id);</code></pre>
-    </section>
-
-    <section>
-        <h3>4. Login & Ajax (serialize)</h3>
-        <p>Gunakan <code>serialize()</code> untuk memproses form dan kirim via <code>$.ajax</code>.</p>
-        <pre><code>// Contoh Login ke Supabase
-$('#loginForm').on('submit', (e) => {
-    e.preventDefault();
-    const payload = $('#loginForm').serialize(); // Jadi object {email, password}
-    
-    $.ajax({
-        url: 'https://PROJECT.supabase.co/auth/v1/token?grant_type=password',
-        method: 'POST',
-        data: payload,
-        headers: { "apikey": "YOUR_KEY" },
-        success: (res) => {
-            localStorage.setItem('sb-token', res.access_token);
-            location.hash = 'data';
-        }
-    });
-});</code></pre>
-    </section>
-
-    <section>
-        <h3>5. Deployment Vercel</h3>
-        <p>Gunakan file <code>vercel.json</code> agar routing SPA Anda tidak error 404 saat di-refresh:</p>
+        <h4>
+           Konfigurasi vercel.json
+        </h4>
         <pre><code>{
-  "version": 2,
-  "cleanUrls": true,
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }</code></pre>
     </section>
 
+    <section>
+        <h4>Supabase Example</h4>
+        Rekomendasi backend menggunakan supabase
+        <pre><code>CREATE TABLE items (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  nama_item TEXT NOT NULL,
+  user_id uuid REFERENCES auth.users DEFAULT auth.uid()
+);
+ALTER TABLE items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Owner All" ON items FOR ALL USING (auth.uid() = user_id);</code></pre>
+    </section>
+
     <footer>
         <hr>
         <p>Dibuat Feb 2026</p>
     </footer>
-
-    <script>
-        const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.route=(r)=>{const l=()=>{const s=location.hash.slice(1)||"/",a=r[s]||r["404"];a&&a()};window.onhashchange=l;l()};
-    </script>
 </body>
 </html>
