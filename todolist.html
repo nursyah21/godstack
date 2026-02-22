@@ -17,8 +17,8 @@
     <div id="app"></div>
 
     <script>
-        const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.go=(s)=>{window.history.pushState({},"",s);window.dispatchEvent(new Event("popstate"))};$.route=(r)=>{const l=()=>{const s=window.location.pathname||"/",a=r[s]||r["404"];a&&a()};window.onpopstate=l;l()};
-
+        const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),show:()=>(e.forEach(e=>e.style.display=""),t),hide:()=>(e.forEach(e=>e.style.display="none"),t),toggle:()=>(e.forEach(e=>e.style.display="none"===e.style.display?"":"none"),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.go=(s)=>{window.history.pushState({},"",s);window.dispatchEvent(new Event("popstate"))};$.route=(r)=>{const l=()=>{const s=window.location.pathname||"/";let p={};const k=Object.keys(r).find(key=>{const n=new RegExp("^"+key.replace(/:[^\s/]+/g,"([^/]+)")+"$"),res=s.match(n);if(res){const ks=key.match(/:[^\s/]+/g)||[];ks.forEach((k,i)=>p[k.slice(1)]=res[i+1]);return true}return false});const a=r[k]||r["404"];if(a)a(p)};window.onpopstate=l;l()};
+        
         const data = $.state({ items: [] }, (s) => {
             if($('#list').element) $('#list').render(s.items);
         });
@@ -27,7 +27,13 @@
             '/': () => {
                 $('#app').html(`
                     <h1>Daftar</h1>
-                    <ul id="list"><li>{{ nama }}</li></ul>
+                    <ul id="list">
+                        <li>
+                            {{ nama }} 
+                            <button onclick="$.go('/edit/{{ id }}')">Edit</button>
+                            <button onclick="$.go('/hapus/{{ id }}')">x</button>
+                        </li>
+                    </ul>
                 `);
                 $('#list').render(data.items);
             },
@@ -41,9 +47,30 @@
                 `);
                 $('#f').on('submit', (e) => {
                     e.preventDefault();
-                    data.items = [...data.items, $('#f').serialize()];
+                    const newItem = { id: Date.now(), ...$('#f').serialize() };
+                    data.items = [...data.items, newItem];
                     $.go('/');
                 });
+            },
+            '/edit/:id': (p) => {
+                const item = data.items.find(i => i.id == p.id);
+                $('#app').html(`
+                    <h1>Edit</h1>
+                    <form id="fe">
+                        <input name="nama" value="${item.nama}" required>
+                        <button>Update</button>
+                    </form>
+                `);
+                $('#fe').on('submit', (e) => {
+                    e.preventDefault();
+                    const updated = $('#fe').serialize();
+                    data.items = data.items.map(i => i.id == p.id ? { ...i, ...updated } : i);
+                    $.go('/');
+                });
+            },
+            '/hapus/:id': (p) => {
+                data.items = data.items.filter(i => i.id != p.id);
+                $.go('/');
             }
         });
     </script>

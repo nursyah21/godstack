@@ -17,7 +17,9 @@
     </header>
 
     <section>
-        <p>contoh penerapan di <a href="https://github.com/nursyah21/godstack/blob/main/todolist.html">todolist</a></p>
+        <p>contoh penerapan di todolist:
+             <a href="https://godstack.vercel.app/todolist.html">demo</a>
+             <a href="https://github.com/nursyah21/godstack/blob/main/todolist.html">source code</a></p>
     </section>
 
     <section>
@@ -25,22 +27,20 @@
             File yg perlu dicopy
         </h4>
         <p>Copy kode ini ke bagian `script` pastikan posisinya paling bawah</p>
-        <pre><code>const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),show:()=>(e.forEach(e=>e.style.display=""),t),hide:()=>(e.forEach(e=>e.style.display="none"),t),toggle:()=>(e.forEach(e=>e.style.display="none"===e.style.display?"":"none"),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.go=(s)=>{window.history.pushState({},"",s);window.dispatchEvent(new Event("popstate"))};$.route=(r)=>{const l=()=>{const s=window.location.pathname||"/",a=r[s]||r["404"];a&&a()};window.onpopstate=l;l()};</code></pre>
+        <pre><code>const $=(s)=>{const e=document.querySelectorAll(s),t={element:e.length===1?e[0]:[...e],html:s=>(e.forEach(e=>e.innerHTML=s),t),on:(s,l)=>(e.forEach(e=>e.addEventListener(s,l)),t),css:s=>(e.forEach(e=>Object.assign(e.style,s)),t),attr:(s,l)=>void 0===l?e[0]?e[0].getAttribute(s):null:(e.forEach(e=>e.setAttribute(s,l)),t),show:()=>(e.forEach(e=>e.style.display=""),t),hide:()=>(e.forEach(e=>e.style.display="none"),t),toggle:()=>(e.forEach(e=>e.style.display="none"===e.style.display?"":"none"),t),serialize:()=>{const s={};return e.forEach(e=>{"FORM"===e.tagName&&new FormData(e).forEach((e,t)=>s[t]=e)}),s},render:(s)=>{e.forEach(e=>{let l=e.getAttribute("data-tpl")||e.innerHTML;e.getAttribute("data-tpl")||e.setAttribute("data-tpl",l);e.innerHTML=Array.isArray(s)?s.map(s=>l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")).join(""):l.replace(/\{\{(.*?)\}\}/g,(e,t)=>s[t.trim()]||"")});return t}};return t};$.ajax=async({url:s,method:e="GET",data:t=null,headers:l={},success:a,error:r})=>{try{const n=e.toUpperCase(),c=await fetch(s,{method:n,headers:{"Content-Type":"application/json",...l},..."GET"!==n&&t?{body:JSON.stringify(t)}:{}});if(!c.ok)throw Error(`HTTP error! status: ${c.status}`);const d=await c.json();return a&&a(d),d}catch(s){if(r)r(s);throw s}};$.state=(s,e)=>new Proxy(s,{set:(s,t,l)=>(s[t]=l,e(s),!0)});$.go=(s)=>{window.history.pushState({},"",s);window.dispatchEvent(new Event("popstate"))};$.route=(r)=>{const l=()=>{const s=window.location.pathname||"/";let p={};const k=Object.keys(r).find(key=>{const n=new RegExp("^"+key.replace(/:[^\s/]+/g,"([^/]+)")+"$"),res=s.match(n);if(res){const ks=key.match(/:[^\s/]+/g)||[];ks.forEach((k,i)=>p[k.slice(1)]=res[i+1]);return true}return false});const a=r[k]||r["404"];if(a)a(p)};window.onpopstate=l;l()};</code></pre>
     
         <p>Copy kode ini ke bagian `style` :</p>
         <pre><code> :root{--p:#007bff;--b:#fff;--t:#333;--g:#f4f4f4}body{font-family:system-ui,sans-serif;line-height:1.6;color:var(--t);max-width:800px;margin:40px auto;padding:0 20px;background:var(--b)}button,.btn{background:var(--p);color:#fff;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;transition:opacity .2s}button:hover{opacity:.8}input,select,textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #ddd;border-radius:4px;box-sizing:border-box}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:12px;border-bottom:1px solid var(--g);text-align:left}th{background:var(--g)}a{color:var(--p)}pre{background:var(--g);padding:15px;border-radius:8px;overflow-x:auto;position:relative}</code></pre>
     </section>
 
-
     <section>
         <h4>
             Route
         </h4>
-        <p>Navigasi sekarang menggunakan path asli. Gunakan <code>$.go('/path')</code> untuk berpindah halaman tanpa reload.</p>
+        <p>Navigasi sekarang menggunakan path asli. Gunakan <code>$.go('/path')</code> untuk berpindah halaman tanpa reload. Mendukung parameter dinamis seperti <code>/:id</code>.</p>
         <pre><code>$.route({
     '/': () => $('#app').html('Halaman Utama'),
-    '/login': () => renderLoginPage(),
-    '/dashboard': () => $('#app').html('Selamat Datang!'),
+    '/user/:id': (p) => $('#app').html('User ID: ' + p.id),
     '404': () => $('#app').html('Halaman Hilang!')
 });
 
@@ -56,7 +56,7 @@ $('#btn').on('click', () => $.go('/dashboard'));</code></pre>
         <pre><code>$('#id').html('Halo'); 
 $('.class').css({ color: 'red' }); 
 $('button').on('click', () => alert('Klik!')); </code></pre>
-        
+
         <p><b>attr(name, value)</b> - Mengambil atau mengubah atribut elemen.</p>
         <pre><code>const link = $('a').attr('href'); // Ambil href
 $('img').attr('src', 'gambar.jpg'); // Ubah src</code></pre>
