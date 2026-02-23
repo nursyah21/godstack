@@ -116,30 +116,39 @@ $.state = function(s, e) {
     });
 };
 
-$.go = function(s) {
-    window.history.pushState({}, "", s);
+$.go = function(path) {
+    const target = path || "/";
+    window.history.pushState({}, "", target);
     window.dispatchEvent(new Event("popstate"));
 };
 
-$.route = function(r) {
-    var l = function() {
-        var s = window.location.pathname || "/";
-        var p = {};
-        var k = Object.keys(r).find(function(key) {
-            var n = new RegExp("^" + key.replace(/:[^\s/]+/g, "([^/]+)") + "$");
-            var res = s.match(n);
-            if (res) {
-                var ks = key.match(/:[^\s/]+/g) || [];
-                ks.forEach(function(param, i) {
-                    p[param.slice(1)] = res[i + 1];
+$.route = function(routes) {
+    var handleRouting = function() {
+        var path = window.location.pathname || "/";
+        var params = {};
+        
+        var matchedKey = Object.keys(routes).find(function(key) {
+            var regex = new RegExp("^" + key.replace(/:[^\s/]+/g, "([^/]+)") + "$");
+            var match = path.match(regex);
+            if (match) {
+                var keys = key.match(/:[^\s/]+/g) || [];
+                keys.forEach(function(param, i) {
+                    params[param.slice(1)] = match[i + 1];
                 });
                 return true;
             }
             return false;
         });
-        var handler = r[k] || r["404"];
-        if (handler) handler(p);
+
+        var handler = routes[matchedKey] || routes["404"];
+        if (handler) {
+            handler(params);
+        } else {
+            console.warn("Route not found: " + path);
+        }
     };
-    window.onpopstate = l;
-    l();
+
+    window.addEventListener("popstate", handleRouting);
+    
+    handleRouting();
 };
